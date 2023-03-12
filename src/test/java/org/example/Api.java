@@ -13,12 +13,12 @@ import static io.restassured.RestAssured.given;
 
 public class Api {
 
-//    @BeforeEach
-//    public void setup() {
-//        System.out.println("---> test start");
-//        RestAssured.baseURI = "http://51.250.6.164";
-//        RestAssured.port = 8080;
-//    }
+    @BeforeEach
+    public void setup() {
+        System.out.println("---> test start");
+        RestAssured.baseURI = "http://51.250.6.164";
+        RestAssured.port = 8080;
+    }
 
     @Test
     public void simplePositiveTest() {
@@ -27,7 +27,8 @@ public class Api {
                 log().
                 all().
                 when().
-                get("http://51.250.6.164:8080/test-orders/5").
+                get("/test-orders/5").
+//                  get("http://51.250.6.164:8080/test-orders/5")    .
                 then().
                 log().
                 all().
@@ -48,7 +49,7 @@ public class Api {
 
 
     @ParameterizedTest
-    @ValueSource(ints = {1, 4, 5})
+    @ValueSource(ints = {1, 2, 5, 9, 10})
     public void simpleParamPositiveTest(int id) {
 
         given().
@@ -57,12 +58,29 @@ public class Api {
                 when().
                 get("/test-orders/{id}", id).
         then().
+                log().
+                all().
                 statusCode(HttpStatus.SC_OK);
 
     }
+    @ParameterizedTest
+    @ValueSource(ints = {0, 11, -1})
+    public void simpleParamNegativeTest(int id) {
+
+        given().
+                log().
+                all().
+                when().
+                get("/test-orders/{id}", id).
+                then().
+                log().
+                all().
+                statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
 
     @Test
-    public void simplePositiveTestAndExtractBodyAsString() {
+    public void simplePositiveTestAndExtractBodyStatusOpen() {
 
         String responseString = given().
                 log().
@@ -119,6 +137,50 @@ public class Api {
                 .statusCode(HttpStatus.SC_OK);
     }
 
+    String secondOrder = "{\"customerName\":\"name\",\"customerPhone\":\"123456\",\"comment\":\"comment\"}";
+//3. Добавьте отдельный негативный тест, проверяющий код ответа 415 для метода POST (исключите header request).
+    @Test
+    public void createOrderAndCheckNegativeStatusCode() {
+
+        given()
+
+                .body(order)
+                .log()
+                .all()
+                .post("/test-orders")
+                .then()
+                .log()
+                .all()
+                .assertThat()
+                .statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE);
+    }
+
+    //4. Добавьте отдельный позитивный парметризованный тест, проверяющий тело ответа для метода GET. В теле нужно проверить
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 5, 9, 10})
+    public void simplePositiveTestAndExtractBodyAsString(int id) {
+
+        String responseString = given().
+                log().
+                all().
+                when().
+                get("/test-orders/{id}", id).
+                then().
+                log().
+                all().
+                statusCode(200).
+                and().
+                extract().
+                path("status");
+
+
+        Assertions.assertTrue( responseString.contains("OPEN") );
+    }
 
 
 }
+
+
+
+
