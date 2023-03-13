@@ -1,6 +1,8 @@
 package org.example;
 
+import dto.OrderDto;
 import io.restassured.RestAssured;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,12 +31,11 @@ public class Api {
                 when().
                 get("/test-orders/5").
 //                  get("http://51.250.6.164:8080/test-orders/5")    .
-                then().
+        then().
                 log().
                 all().
                 statusCode(200);
     }
-
 
 
     @Test
@@ -57,12 +58,13 @@ public class Api {
                 all().
                 when().
                 get("/test-orders/{id}", id).
-        then().
+                then().
                 log().
                 all().
                 statusCode(HttpStatus.SC_OK);
 
     }
+
     @ParameterizedTest
     @ValueSource(ints = {0, 11, -1})
     public void simpleParamNegativeTest(int id) {
@@ -87,7 +89,7 @@ public class Api {
                 all().
                 when().
                 get("/test-orders/5").
-        then().
+                then().
                 log().
                 all().
                 statusCode(200).
@@ -95,7 +97,7 @@ public class Api {
                 extract().
                 asString();
 
-        Assertions.assertTrue( responseString.contains("OPEN") );
+        Assertions.assertTrue(responseString.contains("OPEN"));
     }
 
 
@@ -115,18 +117,30 @@ public class Api {
                 extract().
                 path("id");
 
-        Assertions.assertTrue( responseId > 0 );
+        Assertions.assertTrue(responseId > 0);
     }
 
 
-    String order = "{\"customerName\":\"name\",\"customerPhone\":\"123456\",\"comment\":\"comment\"}";
+//    String order = "{\"customerName\":\"name\",\"customerPhone\":\"123456\",\"comment\":\"comment\"}";
 
     @Test
     public void createOrderAndCheckStatusCode() {
+        OrderDto orderDto = new OrderDto("testname", "21546494", "no");
+//        int length = 10;
+//        boolean useLetters = true;
+//        boolean useNumbers = false;
+//        String randomName = RandomStringUtils.random(10, true, false);
+//        String randomPhoneNumber = RandomStringUtils.random(10, false, true);
+//        String randomComment = RandomStringUtils.random(5, true, true);
+        OrderDto orderDtoRandom = new OrderDto();
+//        orderDtoRandom.setCustomerName(RandomStringUtils.random(10, true, false));
+        orderDtoRandom.setCustomerName (generateRandomName());
+        orderDtoRandom.setCustomerPhone(RandomStringUtils.random(10, false, true));
+        orderDtoRandom.setComment(RandomStringUtils.random(5, true, true));
 
         given()
                 .header("Content-type", "application/json")
-                .body(order)
+                .body(orderDtoRandom)
                 .log()
                 .all()
                 .post("/test-orders")
@@ -138,13 +152,14 @@ public class Api {
     }
 
     String secondOrder = "{\"customerName\":\"name\",\"customerPhone\":\"123456\",\"comment\":\"comment\"}";
-//3. Добавьте отдельный негативный тест, проверяющий код ответа 415 для метода POST (исключите header request).
+
+    //3. Добавьте отдельный негативный тест, проверяющий код ответа 415 для метода POST (исключите header request).
     @Test
     public void createOrderAndCheckNegativeStatusCode() {
 
         given()
 
-                .body(order)
+                .body(secondOrder)
                 .log()
                 .all()
                 .post("/test-orders")
@@ -175,7 +190,11 @@ public class Api {
                 path("status");
 
 
-        Assertions.assertTrue( responseString.contains("OPEN") );
+        Assertions.assertTrue(responseString.contains("OPEN"));
+    }
+
+    public String generateRandomName() {
+        return RandomStringUtils.random(10, true, false);
     }
 
 
