@@ -1,7 +1,9 @@
 package org.example;
 
-import dto.OrderDto;
+import com.google.gson.Gson;
+import dto.OrderTestDto;
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +14,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Api {
 
@@ -125,30 +129,44 @@ public class Api {
 
     @Test
     public void createOrderAndCheckStatusCode() {
-        OrderDto orderDto = new OrderDto("testname", "21546494", "no");
+        OrderTestDto orderDto = new OrderTestDto("testname", "21546494", "no");
 //        int length = 10;
 //        boolean useLetters = true;
 //        boolean useNumbers = false;
 //        String randomName = RandomStringUtils.random(10, true, false);
 //        String randomPhoneNumber = RandomStringUtils.random(10, false, true);
 //        String randomComment = RandomStringUtils.random(5, true, true);
-        OrderDto orderDtoRandom = new OrderDto();
-//        orderDtoRandom.setCustomerName(RandomStringUtils.random(10, true, false));
-        orderDtoRandom.setCustomerName (generateRandomName());
-        orderDtoRandom.setCustomerPhone(RandomStringUtils.random(10, false, true));
-        orderDtoRandom.setComment(RandomStringUtils.random(5, true, true));
-
-        given()
+//        OrderDto orderDtoRandom = new OrderDto();
+////        orderDtoRandom.setCustomerName(RandomStringUtils.random(10, true, false));
+//        orderDtoRandom.setCustomerName (generateRandomName());
+//        orderDtoRandom.setCustomerPhone(RandomStringUtils.random(10, false, true));
+//        orderDtoRandom.setComment(RandomStringUtils.random(5, true, true));
+        Gson gson = new Gson();
+        Response response= given()
                 .header("Content-type", "application/json")
-                .body(orderDtoRandom)
+                .body(orderDto)
                 .log()
                 .all()
                 .post("/test-orders")
                 .then()
                 .log()
                 .all()
-                .assertThat()
-                .statusCode(HttpStatus.SC_OK);
+                .extract()
+                .response();
+        OrderTestDto orderDtoReceived = gson.fromJson(response.asString(), OrderTestDto.class);
+        assertEquals(orderDto.getCustomerName(), orderDtoReceived.getCustomerName() );
+        assertEquals(orderDto.getCustomerPhone(), orderDtoReceived.getCustomerPhone());
+        assertEquals(orderDto.getComment(), orderDtoReceived.getComment());
+
+        Assertions.assertNotNull(orderDtoReceived.getId());
+        Assertions.assertNull(orderDtoReceived.getStatus());
+        assertAll(
+                "Grouped Assertions of User",
+                () -> assertEquals("noo", orderDtoReceived.getComment(), "1 st Assert"),
+                () -> assertEquals("testnamee", orderDtoReceived.getCustomerName(), "2nd Assert")
+
+        );
+
     }
 
     String secondOrder = "{\"customerName\":\"name\",\"customerPhone\":\"123456\",\"comment\":\"comment\"}";
