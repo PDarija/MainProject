@@ -21,7 +21,7 @@ public class PetStoreAPI {
 
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 7})
-    public void positiveTestResponse(int id) {
+    public void getExistingOrderStatusCode200(int id) {
 
         given().
                 log().
@@ -37,7 +37,7 @@ public class PetStoreAPI {
 
     @ParameterizedTest
     @ValueSource(ints = {5, 6, 8, 9, 10})
-    public void testResponseForNonexistentOrders(int id) {
+    public void getNonExistingOrderStatusCode404(int id) {
 
         given().
                 log().
@@ -52,7 +52,7 @@ public class PetStoreAPI {
 
 
     @Test
-    public void simplePositiveTestUsedId() {
+    public void checkResponseBodyCompleteTrue() {
 
         String orderResponse = given().
                 log().
@@ -68,11 +68,12 @@ public class PetStoreAPI {
                 path("complete");
 
 
-        Assertions.assertTrue( orderResponse.contains("false"));
+        Assertions.assertTrue( orderResponse.contains("true"));
+
     }
 
     @Test
-    public void simplePositiveTestPetId() {
+    public void CheckPetIdBiggerThenZero() {
 
         long petId = given().
                 log().
