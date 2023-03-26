@@ -56,7 +56,57 @@ public class DeliveryTest {
         System.out.println();
 
     }
+    @Test
+    public void createOrderWithoutComment(){
+        OrderRealDto orderRealDto = new OrderRealDto("testname", "1234567", "");
 
+        Gson gson = new Gson();
+
+
+        String comment = given()
+                .header("Content-type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .body(gson.toJson(orderRealDto))
+                .log()
+                .all()
+                .post("/orders")
+                .then()
+                .log()
+                .all()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .path("comment");
+        Assertions.assertEquals("",comment);
+
+
+
+    }
+
+    @Test
+
+    public void createOrderWithoutToken(){
+        OrderRealDto orderRealDto = new OrderRealDto("secondTest", "26589744", "Without onions");
+
+        Gson gson = new Gson();
+
+
+        given()
+                .header("Content-type", "application/json")
+                .header("Authorization", "Bearer")
+                .body(gson.toJson(orderRealDto))
+                .log()
+                .all()
+                .post("/orders")
+                .then()
+                .log()
+                .all()
+                .assertThat()
+                .statusCode(HttpStatus.SC_UNAUTHORIZED);
+
+
+
+
+    }
 
 
     @Test
