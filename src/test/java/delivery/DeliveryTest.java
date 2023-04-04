@@ -6,6 +6,7 @@ import dto.courierCreation;
 import helpers.SetupFunctions;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -300,10 +301,8 @@ public class DeliveryTest {
 
 
     public Response createCourier() {
-        String courierName = generateRandomName();
-        String courierPassword = generateRandomPassword();
-        String courierLogin = generateRandomLogin();
-        CourierCreationDto courierBody = new CourierCreationDto(courierLogin, courierPassword, courierName);
+
+        courierCreation courierBody = new courierCreation(generateRandomLogin(), generateRandomPassword(), generateRandomName());
         Gson gson = new Gson();
 
         Response response = given()
@@ -318,10 +317,19 @@ public class DeliveryTest {
                 .all()
                 .extract()
                 .response();
+
         return response;
     }
+    public String generateRandomLogin() {
+        return RandomStringUtils.random(5, true, true);
+    }
 
-    private String generateRandomName() {
+    public String generateRandomPassword() {
+        return RandomStringUtils.random(10, true, true);
+    }
+
+    public String generateRandomName() {
+        return RandomStringUtils.random(9, true, false);
     }
 
 
