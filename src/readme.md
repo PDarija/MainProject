@@ -66,3 +66,5 @@ Table for Xpath. Web page http://51.250.6.164:3000/signin
 | 8   |                       Incorrect credentials POP-UP                       |         //div[@data-name = "authorizationError-popup"]         |
 | 9   |                           POP-UP close button                            | //button[@data-name = "authorizationError-popup-close-button"] |
 | 10  |                               POP-UP text                                |              //span[@class="error-popup__title"]               |
+| 11  |                         Logo "Tallinn Learning"                          |               //a[@data-name = "mainPage-link"]                |
+| 12  |                                Page Title                                |                      //h1[@class="title"]                      |
