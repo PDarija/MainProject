@@ -54,17 +54,16 @@ UI check list
 Table for Xpath. Web page http://51.250.6.164:3000/signin
 
 
-| No  |                              Component name                              |                             Xpath                              | 
-|-----|:------------------------------------------------------------------------:|:--------------------------------------------------------------:|
-| 1   |                             Field for login                              |             //input[@data-name ='username-input']              |
-| 2   |                            Field for password                            |             //input[@data-name ='password-input']              |
-| 3   |                              Sign in button                              |             //button[@data-name ='signIn-button']              |
-| 4   |                    Button to switch the language - EN                    |           //button[@class="language__button false"]            |
-| 5   |                    Button to switch the language - RU                    |  //button[@class="language__button language__button_active"]   |
-| 6   | An error for cases of insufficient number of characters for the password |         //span[@class="form-error form-error_active"]          |
-| 7   |  An error for cases of insufficient number of characters for the login   |             //span[@class="form-error undefined"]              |
-| 8   |                       Incorrect credentials POP-UP                       |         //div[@data-name = "authorizationError-popup"]         |
-| 9   |                           POP-UP close button                            | //button[@data-name = "authorizationError-popup-close-button"] |
-| 10  |                               POP-UP text                                |              //span[@class="error-popup__title"]               |
-| 11  |                         Logo "Tallinn Learning"                          |               //a[@data-name = "mainPage-link"]                |
-| 12  |                                Page Title                                |                      //h1[@class="title"]                      |
+| No  |                                 Component name                                 |                             Xpath                              | 
+|-----|:------------------------------------------------------------------------------:|:--------------------------------------------------------------:|
+| 1   |                                Field for login                                 |             //input[@data-name ='username-input']              |
+| 2   |                               Field for password                               |             //input[@data-name ='password-input']              |
+| 3   |                                 Sign in button                                 |             //button[@data-name ='signIn-button']              |
+| 4   |                       Button to switch the language - EN                       |           //button[@class="language__button false"]            |
+| 5   |                       Button to switch the language - RU                       |  //button[@class="language__button language__button_active"]   |
+| 6   | An error for cases of insufficient number of characters for the password/login |           //span[@data-name="username-input-error"]            |
+| 7   |                          Incorrect credentials POP-UP                          |         //div[@data-name = "authorizationError-popup"]         |
+| 8   |                              POP-UP close button                               | //button[@data-name = "authorizationError-popup-close-button"] |
+| 9   |                                  POP-UP text                                   |              //span[@class="error-popup__title"]               |
+| 10  |                            Logo "Tallinn Learning"                             |               //a[@data-name = "mainPage-link"]                |
+| 11  |                                   Page Title                                   |                      //h1[@class="title"]                      |
