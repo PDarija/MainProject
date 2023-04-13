@@ -1,5 +1,7 @@
 package dto;
 
+import java.util.Random;
+
 public class courierCreation {
 
 
@@ -13,4 +15,7 @@ public class courierCreation {
         this.password = password;
         this.name = name;
     }
+
+
+
 }
