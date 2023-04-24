@@ -192,8 +192,19 @@ public class DeliveryTest {
         System.out.println();
 
     }
+    public void deleteOrderById(long id) {
 
-    private void deleteOrderById(long id) {
+        given()
+                .header("Content-type", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .log()
+                .all()
+                .delete("/orders/" + id)
+                .then()
+                .log()
+                .all()
+                .assertThat()
+                .statusCode(HttpStatus.SC_OK);
     }
 
     @Test
@@ -211,12 +222,12 @@ public class DeliveryTest {
 //        TODO - check response code
     }
 
+
     @Test
     public void courierOrderAssignForbiddenForStudent() {
         int orderId = orderCreationPrecondition();
 //        String string = String.format("/orders/%s/assign", orderId);
         Response response = executePutMethodByStudent(String.format("/orders/%s/assign", orderId));
-        System.out.println();
 //        Assertions.assertEquals(response.statusCode(), );
     }
 
