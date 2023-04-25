@@ -11,17 +11,53 @@ import java.util.Properties;
 import static io.restassured.RestAssured.given;
 
 public class SetupFunctions {
+    //api
     String baseUrl;
     String username;
     String password;
+//db
+
+    String dbhost;
+    String dbport;
+    String dbname;
+    String dbusername;
+    String dbpassword;
+
+    public String getDbhost() {
+        return dbhost;
+    }
+
+    public String getDbport() {
+        return dbport;
+    }
+
+    public String getDbname() {
+        return dbname;
+    }
+
+    public String getDbusername() {
+        return dbusername;
+    }
+
+    public String getDbpassword() {
+        return dbpassword;
+    }
 
     public SetupFunctions() {
         try (InputStream input = new FileInputStream("settings.properties")) {
             Properties properties = new Properties();
             properties.load(input);
+            //api
             baseUrl = properties.getProperty("baseUrl");
             username = properties.getProperty("username");
             password = properties.getProperty("password");
+            //
+            dbhost  = properties.getProperty("dbhost");
+            dbport = properties.getProperty("dbport");
+            dbname = properties.getProperty("dbname");
+            dbusername = properties.getProperty("dbusername");
+            dbpassword = properties.getProperty("dbpassword");
+
         } catch (IOException e) {
             e.printStackTrace();
         }

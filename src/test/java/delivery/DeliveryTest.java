@@ -169,10 +169,10 @@ public class DeliveryTest {
 
 
 //        orderRealDtoArray.length
-        for (int i = 0; i < orderRealDtoArray.length; i++) {
+        for (OrderRealDto orderRealDto : orderRealDtoArray) {
 
-            System.out.println(orderRealDtoArray[i].getId());
-            deleteOrderById(orderRealDtoArray[i].getId());
+            System.out.println(orderRealDto.getId());
+            deleteOrderById(orderRealDto.getId());
         }
 // ex 3
         OrderRealDto[] orderRealDtoArrayAfterDeletion = given()
