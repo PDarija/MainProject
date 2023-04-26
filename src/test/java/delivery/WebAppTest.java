@@ -3,6 +3,7 @@ package delivery;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
+import helpers.SetupFunctions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.openqa.selenium.By;
 import static com.codeborne.selenide.Selenide.*;
 
 public class WebAppTest {
+
+
 
     @BeforeEach
     public void setUp() {
@@ -28,7 +31,7 @@ public class WebAppTest {
     public void incorrectLogin() {
 
 //       Configuration.browser="firefox" ;
-        Configuration.holdBrowserOpen = true;
+//        Configuration.holdBrowserOpen = true;
 //        open("http://51.250.6.164:3000/signin");
 //        SelenideElement usernameInput = $(By.xpath("//input[@data-name ='username-input']"));
 //        SelenideElement passwordInput = $(By.xpath("//input[@data-name ='password-input'] "));
@@ -69,8 +72,10 @@ public class WebAppTest {
 //        $(By.xpath("//button[@data-name='createOrder-button']")).shouldBe(Condition.visible);
 
         LoginPage loginPage = new LoginPage();
-        loginPage.insertLogin("darijapl");
-        loginPage.insertPassword("hellouser123");
+        String username = new SetupFunctions().getUsername();
+        String password = new SetupFunctions().getPassword();
+        loginPage.insertLogin(username);
+        loginPage.insertPassword(password);
         loginPage.clickSignInButton();
         loginPage.checkNameField();
         loginPage.checkSurnameField();
